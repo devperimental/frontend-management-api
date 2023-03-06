@@ -31,4 +31,4 @@ jobs:
           team-pat: ${{ env.team-pat }}
 
       - name: Build the Docker image
-        run: docker build --build-arg NUGET_USERNAME=${{ env.nuget-username }} --build-arg NUGET_PAT=${{ env.team-pat }} --build-arg NUGET_ORGANISATION=${{ env.repo-organisation }} -t frontend-mgmt-api:$(date +%s) -f ./source/code/Dockerfile .
+        run: docker build --build-arg NUGET_USERNAME=${{ env.nuget-username }} --build-arg NUGET_PAT=${{ env.team-pat }} --build-arg NUGET_ORGANISATION=${{ env.repo-organisation }} -t frontend-mgmt-api:$(date +%s) source/code .
