@@ -29,3 +29,8 @@ jobs:
           coverage-threshold: ${{ env.coverage-threshold }}
           repo-organisation: ${{ env.repo-organisation }}
           team-pat: ${{ env.team-pat }}
+
+      - name: Build the Docker image
+        run: |
+          cd ./src/code
+          docker build --build-arg NUGET_USERNAME=${{ env.nuget-username }} --build-arg NUGET_PAT=${{ env.team-pat }} --build-arg NUGET_ORGANISATION=${{ env.repo-organisation }} -t frontend-mgmt-api:$(date +%s) .
