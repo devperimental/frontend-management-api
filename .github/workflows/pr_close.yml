@@ -5,17 +5,17 @@ on:
 env:
   nuget-username: chrisxpr
   src-dir: ./src/code
-  cdk-dir: ./cdk
+  cdk-dir: ./cdk/lib
   coverage-threshold: 0
   repo-organisation: architected
   team-pat: ${{ secrets.NUGET_PAT}}
-  cdk_action: deploy
+  cdk_action: destroy
   aws_account_id: $ {{ secrets.AWS_ACCOUNT_ID_NONPROD }}
   aws_secret: ${{ secrets.AWS_SECRET}}
   aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID}}
   aws_region: ap-southeast-2
   service_key: frontend-management-api
-  ecr_repo_name: frontend-management-api
+  ecr_repository_name: frontend-management-api
   target_environment: x-${{ github.event.number}}
 
 concurrency: alpha-${{ github.ref}}
