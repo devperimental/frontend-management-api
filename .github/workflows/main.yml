@@ -54,6 +54,6 @@ jobs:
           IMAGE_TAG: 'latest'
         run: |
           cd ./src/code
-          docker build --build-arg NUGET_USERNAME=${{ env.nuget-username }} --build-arg NUGET_PAT=${{ env.team-pat }} --build-arg NUGET_ORGANISATION=${{ env.repo-organisation }} -t management-api:${{ $IMAGE_TAG }} .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker build --build-arg NUGET_USERNAME=${{ env.nuget-username }} --build-arg NUGET_PAT=${{ env.team-pat }} --build-arg NUGET_ORGANISATION=${{ env.repo-organisation }} -t $ECR_REGISTRY/$ECR_REPOSITORY/management-api:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY/management-api:$IMAGE_TAG
+          echo "name=image::$ECR_REGISTRY/$ECR_REPOSITORY/management-api:$IMAGE_TAG" >> $GITHUB_OUTPUT
