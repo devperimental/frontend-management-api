@@ -5,7 +5,7 @@ on:
 env:
   nuget-username: chrisxpr
   src-dir: ./src/code
-  cdk-dir: ./cdk/bin
+  cdk-dir: ./cdk
   coverage-threshold: 0
   repo-organisation: architected
   team-pat: ${{ secrets.NUGET_PAT}}
