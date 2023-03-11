@@ -15,7 +15,7 @@ env:
   aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID}}
   aws_region: ap-southeast-2
   service_key: frontend-management-api
-  ecr_repo_name: frontend-management-api
+  ecr_repository_name: frontend-management-api
   target_environment: x-${{ github.event.number}}
 
 concurrency: alpha-${{ github.ref}}
