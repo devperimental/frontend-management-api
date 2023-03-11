@@ -30,7 +30,27 @@ jobs:
           repo-organisation: ${{ env.repo-organisation }}
           team-pat: ${{ env.team-pat }}
 
-      - name: Build the Docker image
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.aws-access-key-id }}
+          aws-secret-access-key: ${{ env.aws-secret }}
+          aws-region: ${{ env.aws-region }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push the image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ env.ecr-repo-name }}
+          IMAGE_TAG: x-${{ github.ref}}
         run: |
           cd ./src/code
-          docker build --build-arg NUGET_USERNAME=${{ env.nuget-username }} --build-arg NUGET_PAT=${{ env.team-pat }} --build-arg NUGET_ORGANISATION=${{ env.repo-organisation }} -t frontend-mgmt-api:$(date +%s) .
+          docker build --build-arg NUGET_USERNAME=${{ env.nuget-username }} --build-arg NUGET_PAT=${{ env.team-pat }} --build-arg NUGET_ORGANISATION=${{ env.repo-organisation }} -t $ECR_REGISTRY/$ECR_REPOSITORY/management-api:${{ $IMAGE_TAG }} .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY/management-api:$IMAGE_TAG
+          echo "name=image::$ECR_REGISTRY/$ECR_REPOSITORY/management-api:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      
+      
