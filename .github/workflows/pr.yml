@@ -11,7 +11,7 @@ env:
   aws-secret: ${{ secrets.AWS_SECRET}}
   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
   aws-region: ap-southeast-2
-  ecr-repo-name: devperimental/service-registry
+  ecr-repo-name: frontend-management-api
   target-environment: x-${{ github.event.number}}
 concurrency: alpha-${{ github.ref}}
 jobs:
@@ -54,7 +54,6 @@ jobs:
           IMAGE_TAG: ${{ env.target-environment}}
         run: |
           cd ./src/code
-          docker build --build-arg NUGET_USERNAME=${{ env.nuget-username }} --build-arg NUGET_PAT=${{ env.team-pat }} --build-arg NUGET_ORGANISATION=${{ env.repo-organisation }} -t management-api:$IMAGE_TAG .
-          docker tag management-api:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY
-          echo "name=image::$ECR_REGISTRY/$ECR_REPOSITORY/management-api:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker build --build-arg NUGET_USERNAME=${{ env.nuget-username }} --build-arg NUGET_PAT=${{ env.team-pat }} --build-arg NUGET_ORGANISATION=${{ env.repo-organisation }} -t $ECR_REGISTRY/$ECR_REPOSITORY/$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY/$IMAGE_TAG
+          echo "name=image::$ECR_REGISTRY/$ECR_REPOSITORY/$IMAGE_TAG" >> $GITHUB_OUTPUT
