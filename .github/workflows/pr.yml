@@ -1,18 +1,23 @@
-name: PR Pipeline
+name: PR Active Pipeline
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 env:
   nuget-username: chrisxpr
   src-dir: ./src/code
+  cdk-dir: ./cdk
   coverage-threshold: 0
   repo-organisation: architected
   team-pat: ${{ secrets.NUGET_PAT}}
-  aws-secret: ${{ secrets.AWS_SECRET}}
-  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
-  aws-region: ap-southeast-2
-  ecr-repo-name: frontend-management-api
-  target-environment: x-${{ github.event.number}}
+  cdk_action: deploy
+  aws_account_id: $ {{ secrets.AWS_ACCOUNT_ID_NONPROD }}
+  aws_secret: ${{ secrets.AWS_SECRET}}
+  aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID}}
+  aws_region: ap-southeast-2
+  service_key: frontend-management-api
+  ecr_repo_name: frontend-management-api
+  target_environment: x-${{ github.event.number}}
+
 concurrency: alpha-${{ github.ref}}
 jobs:
   dotnetBuild:
@@ -38,9 +43,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ env.aws-access-key-id }}
-          aws-secret-access-key: ${{ env.aws-secret }}
-          aws-region: ${{ env.aws-region }}
+          aws-access-key-id: ${{ env.aws_access_key_id }}
+          aws-secret-access-key: ${{ env.aws_secret }}
+          aws-region: ${{ env.aws_region }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -50,10 +55,24 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ env.ecr-repo-name }}
-          IMAGE_TAG: ${{ env.target-environment}}
+          ECR_REPOSITORY: ${{ env.ecr_repository_name }}
+          IMAGE_TAG: ${{ env.target_environment}}
         run: |
           cd ./src/code
           docker build --build-arg NUGET_USERNAME=${{ env.nuget-username }} --build-arg NUGET_PAT=${{ env.team-pat }} --build-arg NUGET_ORGANISATION=${{ env.repo-organisation }} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: install npm
+        run: 'sudo apt update -y && sudo apt install nodejs npm -y'
+
+      - name: Install AWS CDK
+        run: 'sudo npm install -g aws-cdk'
+
+      - name: CDK Synth
+        run: cdk synth
+        working-directory: ${{ env.cdk-dir }}
+
+      - name: CDK Deploy
+        run: cdk deploy
+        working-directory: ${{ env.cdk-dir }}

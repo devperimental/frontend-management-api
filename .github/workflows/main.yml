@@ -6,7 +6,7 @@ on:
 env:
   nuget-username: chrisxpr
   src-dir: ./src/code
-  coverage-threshold: 0
+  coverage-threshold: 80
   repo-organisation: architected
   team-pat: ${{ secrets.NUGET_PAT}}
   aws-secret: ${{ secrets.AWS_SECRET}}
