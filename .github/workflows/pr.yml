@@ -57,8 +57,9 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ env.ecr_repository_name }}
           IMAGE_TAG: ${{ env.target_environment}}
+          SRC_DIR: ${{ env.src-dir }}
         run: |
-          cd ./src/code
+          cd $SRC_DIR
           docker build --build-arg NUGET_USERNAME=${{ env.nuget-username }} --build-arg NUGET_PAT=${{ env.team-pat }} --build-arg NUGET_ORGANISATION=${{ env.repo-organisation }} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
@@ -67,9 +68,11 @@ jobs:
         run: 'sudo apt update -y && sudo apt install nodejs npm -y'
 
       - name: Install AWS CDK and dependencies
+        env:
+          CDK_DIR: ${{ env.cdk-dir }}
         run: |
           sudo npm install -g aws-cdk
-          cd ./cdk
+          cd $CDK_DIR
           sudo npm install
 
       - name: CDK Synth
@@ -77,5 +80,5 @@ jobs:
         working-directory: ${{ env.cdk-dir }}
 
       - name: CDK Deploy
-        run: cdk deploy
+        run: cdk deploy --require-approval never
         working-directory: ${{ env.cdk-dir }}
