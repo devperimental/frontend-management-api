@@ -7,7 +7,7 @@
 test('SQS Queue Created', () => {
 //   const app = new cdk.App();
 //     // WHEN
-//   const stack = new AwsCdkDemo.AwsCdkDemoStack(app, 'MyTestStack');
+//   const stack = new AwsCdkDemo.ServiceCdkStack(app, 'MyTestStack');
 //     // THEN
 //   const template = Template.fromStack(stack);
 

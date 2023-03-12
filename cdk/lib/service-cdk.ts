@@ -16,7 +16,7 @@ export interface IStackSettings extends cdk.StackProps
   target_environment:string;
 }
 
-export class AwsCdkDemoStack extends cdk.Stack {
+export class ServiceCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: IStackSettings) {
     super(scope, id, props);
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { AwsCdkDemoStack, IStackSettings } from '../lib/service-cdk';
+import { ServiceCdkStack, IStackSettings } from '../lib/service-cdk';
 
 const action:string = process.env.cdk_action || 'unknown';
 const accountId:string = process.env.aws_account_id || 'unknown';
@@ -21,4 +21,4 @@ console.log(stackSettings);
 
 const app = new cdk.App();
 
-new AwsCdkDemoStack(app, 'AwsCdkDemoStack', stackSettings);
+new ServiceCdkStack(app, 'ServiceCdkStack', stackSettings);
