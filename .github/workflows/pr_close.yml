@@ -5,7 +5,7 @@ on:
 env:
   nuget-username: chrisxpr
   src-dir: ./src/code
-  cdk-dir: ./cdk/bin
+  cdk-dir: ./cdk
   coverage-threshold: 0
   repo-organisation: architected
   team-pat: ${{ secrets.NUGET_PAT}}
@@ -41,8 +41,13 @@ jobs:
       - name: install npm
         run: 'sudo apt update -y && sudo apt install nodejs npm -y'
 
-      - name: Install AWS CDK
-        run: 'sudo npm install -g aws-cdk'
+      - name: Install AWS CDK and dependencies
+        env:
+          CDK_DIR: ${{ env.cdk-dir }}
+        run: |
+          sudo npm install -g aws-cdk
+          cd $CDK_DIR
+          sudo npm install
 
       - name: CDK Destroy
         run: cdk destroy

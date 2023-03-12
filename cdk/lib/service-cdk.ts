@@ -28,7 +28,7 @@ export class AwsCdkDemoStack extends cdk.Stack {
         {  cidrMask: 24, subnetType: ec2.SubnetType.PUBLIC, name: "Public" },
         {  cidrMask: 24, subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS, name: "Private" }
         ],
-      maxAzs: 1 // Default is all AZs in region
+      maxAzs: 2 // Default is all AZs in region
     });
 
     // Create an ECS cluster
