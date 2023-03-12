@@ -17,7 +17,7 @@ env:
     aws_region: ap-southeast-2
     service_key: frontend-management-api
     ecr_repository_name: frontend-management-api
-    target_environment: dev
+    target-environment: dev
 concurrency: main-${{ github.ref}}
 jobs:
   dotnetBuild:
