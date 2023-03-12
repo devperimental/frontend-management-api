@@ -22,7 +22,8 @@ var app = builder.Build();
 app.UseApi(bootstrapConfiguration, () => {
     app.UseAuthorization();
     app.MapControllers();
-    app.MapGet("/", () => "Welcome to running ASP.NET Core Minimal API on AWS Lambda");
+    app.MapGet("/hello", () => "world");
+    app.MapHealthChecks("/healthz");
 });
 
 
