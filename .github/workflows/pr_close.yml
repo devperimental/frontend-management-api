@@ -50,5 +50,5 @@ jobs:
           sudo npm install
 
       - name: CDK Destroy
-        run: cdk destroy --require-approval never
+        run: cdk destroy --force
         working-directory: ${{ env.cdk-dir }}
